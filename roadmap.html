@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>My Life Roadmap</title>
+<title>Master Project Roadmap</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -289,9 +289,9 @@
 </head>
 <body>
   <main class="wrap">
-    <p class="eyebrow">Personal roadmap · plotted <span id="today"></span></p>
-    <h1>The Road Ahead</h1>
-    <p class="lede">A living map of my life — the chapters behind me, the one I'm walking now, and the trail still to come.</p>
+    <p class="eyebrow">One project at a time · updated <span id="today"></span></p>
+    <h1>Master Project Roadmap</h1>
+    <p class="lede">The rule: finish, publish, then next. The trail from Mac setup to a published developer career — plus the bigger life builds rolling in the background.</p>
 
     <section class="summary" aria-label="Progress">
       <div class="summary-top">
@@ -311,7 +311,7 @@
     <div class="route" id="route"></div>
 
     <footer>
-      Made with an HTML file I can edit anytime. // update the list in the code to keep this true.
+      ⚓ Every finished project makes the next one faster. // ShipRemit published = developer career officially started.
     </footer>
   </main>
 
@@ -325,55 +325,83 @@
    ============================================================= */
 const ROADMAP = [
   {
-    chapter: "Foundations",
-    when: "Age 18–23 · 2020–2025",
-    note: "Learning who I am and building my base.",
+    chapter: "Mac Mini Environment 💻",
+    when: "Priority 1 · The foundation",
+    now: true,               // <-- current focus
+    note: "Claude Code working here = everything else unlocks.",
     milestones: [
-      { text: "Finish my studies / first qualification", detail: "2024", status: "done" },
-      { text: "Learn to manage my own money",            detail: "2023", status: "done" },
-      { text: "First real job or income",                detail: "2025", status: "done" },
+      { text: "Buy Mac mini M4 (16GB / 256GB)",      detail: "Next",     status: "now"  },
+      { text: "Complete setup (follow Setup Guide)", detail: "Mac week", status: "next" },
+      { text: "Get Claude Code running",             detail: "Unlocks", status: "next" },
     ],
   },
   {
-    chapter: "Building",
-    when: "Age 24–28 · 2026–2030",
-    now: true,               // <-- this is where I am today
-    note: "Growing skills, saving, and finding my direction.",
+    chapter: "ShipRemit 💸",
+    when: "Priority 2 · First published app",
+    note: "Merge the best of the 3 repos, then ship to the stores.",
     milestones: [
-      { text: "Build this life roadmap",                 detail: "Now",     status: "done" },
-      { text: "Save 6 months of emergency fund",         detail: "Ongoing", status: "now"  },
-      { text: "Level up in my career / start a project", detail: "2027",    status: "now"  },
-      { text: "Travel to 3 new places",                  detail: "2028",    status: "next" },
+      { text: "Merge shipremit V1/V2/V3 into one",       detail: "Mac week", status: "next" },
+      { text: "Convert to Capacitor (iOS + Android)",    detail: "—",        status: "next" },
+      { text: "Test on real devices",                    detail: "—",        status: "next" },
+      { text: "Publish to App Store + Play Store",       detail: "—",        status: "next" },
     ],
   },
   {
-    chapter: "Roots",
-    when: "Age 29–35 · 2031–2037",
-    note: "Putting down roots — home, people, stability.",
+    chapter: "ShipConnect 🌐 + ShipChat 💬",
+    when: "Priority 3",
+    note: "Same Capacitor process — faster the second time.",
     milestones: [
-      { text: "Own or settle into a stable home",        detail: "2032", status: "next" },
-      { text: "Deepen key relationships",                detail: "—",    status: "next" },
-      { text: "Reach a big financial goal",              detail: "2035", status: "next" },
+      { text: "Convert to Capacitor",  detail: "—", status: "next" },
+      { text: "Publish",               detail: "—", status: "next" },
     ],
   },
   {
-    chapter: "Growth",
-    when: "Age 36–45 · 2038–2047",
-    note: "Mastery in my work and giving back.",
+    chapter: "PinoyTranslate 🇵🇭",
+    when: "Priority 4 · The new one",
+    note: "Tagalog · Cebuano · Ilocano · Waray, built from bulk dictionary data.",
     milestones: [
-      { text: "Reach a leadership / expert level",       detail: "2040", status: "next" },
-      { text: "Mentor or teach others",                  detail: "—",    status: "next" },
-      { text: "Invest for long-term freedom",            detail: "2045", status: "next" },
+      { text: "Download free dictionary data (Wiktionary, Tatoeba, NLLB)", detail: "—", status: "next" },
+      { text: "Build searchable word database (Firebase)",                detail: "—", status: "next" },
+      { text: "Community 'add word' feature — the special sauce",         detail: "—", status: "next" },
     ],
   },
   {
-    chapter: "Legacy",
-    when: "Age 46+ · 2048 →",
-    note: "Freedom to choose, and leaving something behind.",
+    chapter: "Boss ME-90 Controller 🎸",
+    when: "Priority 5",
+    note: "APK v1.1 already shipped — just needs cleanup.",
     milestones: [
-      { text: "Financial independence",                  detail: "2050", status: "next" },
-      { text: "Pursue a lifelong dream",                 detail: "—",    status: "next" },
-      { text: "Give back to my community",               detail: "—",    status: "next" },
+      { text: "Ship APK v1.1 with landing page",           detail: "Done", status: "done" },
+      { text: "Fix version mismatch + merge to index.html", detail: "—",   status: "next" },
+      { text: "Move APK to GitHub Releases",               detail: "—",    status: "next" },
+    ],
+  },
+  {
+    chapter: "Voice Memory System 🎙️",
+    when: "Priority 6 · Personal use only ⚠️",
+    note: "Whisper (English/Tagalog) + Meta MMS (Bisaya) on the Mac.",
+    milestones: [
+      { text: "Set up Whisper + Meta MMS transcription", detail: "—",     status: "next" },
+      { text: "Later: Raspberry Pi as portable ears",    detail: "Later", status: "next" },
+    ],
+  },
+  {
+    chapter: "Guitar Build 🎸",
+    when: "Priority 7 · The fun reward",
+    note: "Design the body by hand, let Claude handle the fretboard math.",
+    milestones: [
+      { text: "Fusion 360 + Claude scripts for fretboard math", detail: "—", status: "next" },
+      { text: "Design body and build it",                       detail: "—", status: "next" },
+    ],
+  },
+  {
+    chapter: "Life projects 💪",
+    when: "Also rolling",
+    note: "The bigger picture, always moving in the background.",
+    milestones: [
+      { text: "Egg business 🥚",                detail: "—", status: "next" },
+      { text: "Build house 🏠",                 detail: "—", status: "next" },
+      { text: "Build workshop 🛠️",              detail: "—", status: "next" },
+      { text: "Courses 3.12 / 6.09 / 6.10 📚",  detail: "—", status: "next" },
     ],
   },
 ];
