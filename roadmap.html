@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Life Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* =========================================================
+     LIFE ROADMAP — theme tokens (change colors here if you like)
+     ========================================================= */
+  :root {
+    --paper:      #F5F4EF;  /* page background (field-notebook paper) */
+    --paper-2:    #EFEDE4;  /* faint grid line color */
+    --ink:        #1B2A27;  /* main text */
+    --muted:      #7E8B85;  /* secondary text */
+    --route:      #206A54;  /* the trail / route line */
+    --route-soft: #CADED4;  /* route line, faded (upcoming) */
+    --now:        #E29B2E;  /* "you are here" / in-progress accent */
+    --card:       #FBFAF6;  /* card surface */
+    --line:       #E2E0D6;  /* borders */
+    --done-bg:    #DEEBE4;
+    --done-tx:    #206A54;
+    --now-bg:     #F7E7C9;
+    --now-tx:     #97671A;
+    --next-bg:    #E7E9EC;
+    --next-tx:    #5B6771;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background-color: var(--paper);
+    /* faint graph-paper grid */
+    background-image:
+      linear-gradient(var(--paper-2) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-2) 1px, transparent 1px);
+    background-size: 26px 26px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 22px 90px;
+  }
+
+  /* ---------- Header ---------- */
+  .eyebrow {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--route);
+    margin: 0 0 14px;
+  }
+
+  h1 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 46ch;
+    margin: 0 0 30px;
+  }
+
+  /* ---------- Progress summary ---------- */
+  .summary {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .summary-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .summary-label {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .summary-count {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .bar {
+    height: 10px;
+    background: var(--paper-2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .bar > span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--route);
+    border-radius: 99px;
+    transition: width 900ms cubic-bezier(.2,.7,.2,1);
+  }
+
+  /* ---------- Filter chips ---------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px 0 6px;
+  }
+  .chip {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 7px 14px;
+    border-radius: 99px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .chip:hover { border-color: var(--route); color: var(--ink); }
+  .chip[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .chip:focus-visible { outline: 3px solid var(--now); outline-offset: 2px; }
+
+  /* ---------- Timeline / route ---------- */
+  .route {
+    position: relative;
+    margin-top: 34px;
+    padding-left: 42px;
+  }
+  /* the vertical trail line */
+  .route::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    background: repeating-linear-gradient(
+      var(--route) 0 10px,
+      transparent 10px 16px
+    );
+    border-radius: 3px;
+  }
+
+  .station {
+    position: relative;
+    margin-bottom: 34px;
+  }
+  /* station node on the route */
+  .node {
+    position: absolute;
+    left: -42px;
+    top: 2px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 3px solid var(--route);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--route);
+    z-index: 2;
+  }
+  .station.is-now .node {
+    border-color: var(--now);
+    color: var(--now-tx);
+    background: var(--now-bg);
+    box-shadow: 0 0 0 0 rgba(226,155,46,.55);
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(226,155,46,.5); }
+    70%  { box-shadow: 0 0 0 12px rgba(226,155,46,0); }
+    100% { box-shadow: 0 0 0 0 rgba(226,155,46,0); }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 22px;
+  }
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .chapter {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .when {
+    font-family: "Space Mono", monospace;
+    font-size: 13px;
+    color: var(--route);
+    white-space: nowrap;
+  }
+  .station.is-now .when { color: var(--now-tx); }
+  .note {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0 0 14px;
+  }
+
+  /* ---------- Milestones ---------- */
+  ul.miles { list-style: none; margin: 0; padding: 0; }
+  ul.miles li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 9px 0;
+    border-top: 1px solid var(--line);
+  }
+  ul.miles li:first-child { border-top: none; }
+  .mile-text { flex: 1; }
+  .mile-text.done { text-decoration: line-through; color: var(--muted); }
+  .mile-when {
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+  .pill {
+    font-family: "Space Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+  .pill.done { background: var(--done-bg); color: var(--done-tx); }
+  .pill.now  { background: var(--now-bg);  color: var(--now-tx); }
+  .pill.next { background: var(--next-bg); color: var(--next-tx); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 60px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-family: "Space Mono", monospace;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="eyebrow">Personal roadmap · plotted <span id="today"></span></p>
+    <h1>The Road Ahead</h1>
+    <p class="lede">A living map of my life — the chapters behind me, the one I'm walking now, and the trail still to come.</p>
+
+    <section class="summary" aria-label="Progress">
+      <div class="summary-top">
+        <span class="summary-label">Milestones reached</span>
+        <span class="summary-count" id="count">0 / 0</span>
+      </div>
+      <div class="bar"><span id="barFill"></span></div>
+    </section>
+
+    <div class="filters" role="group" aria-label="Filter milestones">
+      <button class="chip" data-filter="all"  aria-pressed="true">All</button>
+      <button class="chip" data-filter="done" aria-pressed="false">Done</button>
+      <button class="chip" data-filter="now"  aria-pressed="false">In progress</button>
+      <button class="chip" data-filter="next" aria-pressed="false">Planned</button>
+    </div>
+
+    <div class="route" id="route"></div>
+
+    <footer>
+      Made with an HTML file I can edit anytime. // update the list in the code to keep this true.
+    </footer>
+  </main>
+
+<script>
+/* =============================================================
+   EDIT YOUR LIFE HERE 👇
+   Each block is one chapter (a "station" on the road).
+   - "now: true"  marks the chapter you are living right now.
+   - milestone status can be: "done", "now", or "next".
+   Replace the sample text with your own goals, then save.
+   ============================================================= */
+const ROADMAP = [
+  {
+    chapter: "Foundations",
+    when: "Age 18–23 · 2020–2025",
+    note: "Learning who I am and building my base.",
+    milestones: [
+      { text: "Finish my studies / first qualification", detail: "2024", status: "done" },
+      { text: "Learn to manage my own money",            detail: "2023", status: "done" },
+      { text: "First real job or income",                detail: "2025", status: "done" },
+    ],
+  },
+  {
+    chapter: "Building",
+    when: "Age 24–28 · 2026–2030",
+    now: true,               // <-- this is where I am today
+    note: "Growing skills, saving, and finding my direction.",
+    milestones: [
+      { text: "Build this life roadmap",                 detail: "Now",     status: "done" },
+      { text: "Save 6 months of emergency fund",         detail: "Ongoing", status: "now"  },
+      { text: "Level up in my career / start a project", detail: "2027",    status: "now"  },
+      { text: "Travel to 3 new places",                  detail: "2028",    status: "next" },
+    ],
+  },
+  {
+    chapter: "Roots",
+    when: "Age 29–35 · 2031–2037",
+    note: "Putting down roots — home, people, stability.",
+    milestones: [
+      { text: "Own or settle into a stable home",        detail: "2032", status: "next" },
+      { text: "Deepen key relationships",                detail: "—",    status: "next" },
+      { text: "Reach a big financial goal",              detail: "2035", status: "next" },
+    ],
+  },
+  {
+    chapter: "Growth",
+    when: "Age 36–45 · 2038–2047",
+    note: "Mastery in my work and giving back.",
+    milestones: [
+      { text: "Reach a leadership / expert level",       detail: "2040", status: "next" },
+      { text: "Mentor or teach others",                  detail: "—",    status: "next" },
+      { text: "Invest for long-term freedom",            detail: "2045", status: "next" },
+    ],
+  },
+  {
+    chapter: "Legacy",
+    when: "Age 46+ · 2048 →",
+    note: "Freedom to choose, and leaving something behind.",
+    milestones: [
+      { text: "Financial independence",                  detail: "2050", status: "next" },
+      { text: "Pursue a lifelong dream",                 detail: "—",    status: "next" },
+      { text: "Give back to my community",               detail: "—",    status: "next" },
+    ],
+  },
+];
+/* ===================  end of the part you edit  =================== */
+
+
+// ---- Render (you don't need to change anything below) ----
+const route = document.getElementById("route");
+let currentFilter = "all";
+
+function render() {
+  route.innerHTML = "";
+  let total = 0, done = 0;
+
+  ROADMAP.forEach((stop, i) => {
+    stop.milestones.forEach(m => { total++; if (m.status === "done") done++; });
+
+    const miles = stop.milestones
+      .filter(m => currentFilter === "all" || m.status === currentFilter)
+      .map(m => `
+        <li>
+          <span class="mile-text ${m.status === "done" ? "done" : ""}">${m.text}</span>
+          ${m.detail ? `<span class="mile-when">${m.detail}</span>` : ""}
+          <span class="pill ${m.status}">${labelFor(m.status)}</span>
+        </li>`).join("");
+
+    const section = document.createElement("section");
+    section.className = "station" + (stop.now ? " is-now" : "");
+    section.innerHTML = `
+      <div class="node">${stop.now ? "▲" : (i + 1)}</div>
+      <div class="card">
+        <div class="card-head">
+          <h2 class="chapter">${stop.chapter}</h2>
+          <span class="when">${stop.when}</span>
+        </div>
+        ${stop.note ? `<p class="note">${stop.note}</p>` : ""}
+        <ul class="miles">${miles || `<li><span class="mile-text" style="color:var(--muted)">Nothing here for this filter.</span></li>`}</ul>
+      </div>`;
+    route.appendChild(section);
+  });
+
+  // progress bar
+  document.getElementById("count").textContent = done + " / " + total;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  setTimeout(() => { document.getElementById("barFill").style.width = pct + "%"; }, 120);
+}
+
+function labelFor(s) {
+  return s === "done" ? "Done" : s === "now" ? "In progress" : "Planned";
+}
+
+// filter buttons
+document.querySelectorAll(".chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentFilter = btn.dataset.filter;
+    document.querySelectorAll(".chip").forEach(b =>
+      b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+    render();
+  });
+});
+
+// today's date in the header
+document.getElementById("today").textContent =
+  new Date().toLocaleDateString(undefined, { month: "short", year: "numeric" });
+
+render();
+</script>
+</body>
+</html>
